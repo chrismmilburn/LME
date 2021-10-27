@@ -8,8 +8,8 @@ public class RobotControl {
     private int robotXPosition;
     private int robotYPosition;
     private Compass robotBearing;
-    private int maxXSize;
-    private int maxYSize;
+    private int maxXPosition;
+    private int maxYPosition;
     private Boolean robotLost;
 
 
@@ -23,8 +23,8 @@ public class RobotControl {
     public String commandRobots(Scanner input) {
         String finalBearings="";
 
-        maxXSize = input.nextInt();
-        maxYSize = input.nextInt();
+        maxXPosition = input.nextInt();
+        maxYPosition = input.nextInt();
 
         while(input.hasNext()) {
 
@@ -74,16 +74,32 @@ public class RobotControl {
 
         switch (robotBearing) {
             case N:
-                robotXPosition++;
+                if(robotYPosition == maxYPosition) {
+                      robotLost = true;
+                } else {
+                    robotYPosition++;
+                }
                 break;
             case E:
-                robotYPosition++;
+                if(robotXPosition == maxXPosition) {
+                    robotLost = true;
+                } else {
+                    robotXPosition++;
+                }
                 break;
             case S:
-                robotYPosition--;
+                if(robotYPosition == 0) {
+                    robotLost = true;
+                } else {
+                    robotYPosition--;
+                }
                 break;
             case W:
-                robotXPosition--;
+                if(robotXPosition == 0) {
+                    robotLost = true;
+                } else {
+                    robotXPosition--;
+                }
                 break;
         }
     }

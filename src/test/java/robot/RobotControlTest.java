@@ -38,4 +38,13 @@ class RobotControlTest {
         String result = underTest.commandRobots(scanner);
         Assertions.assertEquals("1 2 E",result);
     }
+
+    @Test
+    void moveRobotOffGrid() {
+        RobotControl underTest = new RobotControl();
+        InputStream testIn = new ByteArrayInputStream("5 3 \n 0 1 W\n F".getBytes(StandardCharsets.UTF_8));
+        Scanner scanner = new Scanner(testIn);
+        String result = underTest.commandRobots(scanner);
+        Assertions.assertEquals("0 1 W LOST",result);
+    }
 }
