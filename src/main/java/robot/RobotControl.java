@@ -13,7 +13,7 @@ public class RobotControl {
     private int maxXPosition;
     private int maxYPosition;
     private Boolean robotLost;
-    private HashSet[][] marsWarningGrid;
+    private HashSet<Compass>[][] marsWarningGrid;
 
     public static void main(String[] args) {
         RobotControl robotControl = new RobotControl();
@@ -24,13 +24,14 @@ public class RobotControl {
 
     public String commandRobots(Scanner input) {
         String finalBearings="";
-
         maxXPosition = input.nextInt();
         maxYPosition = input.nextInt();
+        if((maxXPosition > 50 )||( maxYPosition > 50)) {
+            return("Maximum coordinates too large (max is 50)");
+        }
         marsWarningGrid = new HashSet[maxXPosition+1][maxYPosition+1];
 
         while(input.hasNext()) {
-
             robotXPosition = input.nextInt();
             robotYPosition = input.nextInt();
             robotLost = false;
@@ -42,7 +43,6 @@ public class RobotControl {
 
             System.out.println(finalBearings);
         }
-
         return finalBearings;
     }
 
@@ -52,7 +52,7 @@ public class RobotControl {
         int currentCommand = 0;
         char command;
 
-        while( (currentCommand < commands.length )&&(robotLost != true)) {
+        while( (currentCommand < commands.length )&&(!robotLost)) {
             command = commands[currentCommand++];
             switch (RobotCommands.valueOf(String.valueOf(command))) {
                 case L:
@@ -68,9 +68,7 @@ public class RobotControl {
                     System.out.println("Unknown command "+command);
             }
         }
-        String resultLocation = robotXPosition+" "+robotYPosition+" "+robotBearing+(robotLost?" LOST":"")+" ";
-
-        return resultLocation;
+        return(robotXPosition+" "+robotYPosition+" "+robotBearing+(robotLost?" LOST":"")+" ");
     }
 
     private void moveForward() {
@@ -119,7 +117,7 @@ public class RobotControl {
     private void saveWarning(Compass robotBearing) {
         robotLost = true;
         if( marsWarningGrid[robotXPosition][robotYPosition] == null) {
-            marsWarningGrid[robotXPosition][robotYPosition] = new HashSet<Compass>();
+            marsWarningGrid[robotXPosition][robotYPosition] = new HashSet<>();
         }
         marsWarningGrid[robotXPosition][robotYPosition].add(robotBearing);
     }
