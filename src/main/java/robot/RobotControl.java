@@ -2,6 +2,8 @@ package robot;
 
 import utils.Compass;
 import utils.RobotCommands;
+
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class RobotControl {
@@ -11,7 +13,7 @@ public class RobotControl {
     private int maxXPosition;
     private int maxYPosition;
     private Boolean robotLost;
-
+    private HashSet[][] marsWarningGrid;
 
     public static void main(String[] args) {
         RobotControl robotControl = new RobotControl();
@@ -25,6 +27,7 @@ public class RobotControl {
 
         maxXPosition = input.nextInt();
         maxYPosition = input.nextInt();
+        marsWarningGrid = new HashSet[maxXPosition+1][maxYPosition+1];
 
         while(input.hasNext()) {
 
@@ -74,34 +77,59 @@ public class RobotControl {
 
         switch (robotBearing) {
             case N:
-                if(robotYPosition == maxYPosition) {
-                      robotLost = true;
-                } else {
-                    robotYPosition++;
+                if(movementIsSafe(robotBearing)) {
+                    if (robotYPosition == maxYPosition) {
+                        saveWarning(robotBearing);
+                    } else {
+                        robotYPosition++;
+                    }
                 }
                 break;
             case E:
-                if(robotXPosition == maxXPosition) {
-                    robotLost = true;
-                } else {
-                    robotXPosition++;
+                if(movementIsSafe(robotBearing)) {
+                    if (robotXPosition == maxXPosition) {
+                        saveWarning(robotBearing);
+                    } else {
+                        robotXPosition++;
+                    }
                 }
                 break;
             case S:
-                if(robotYPosition == 0) {
-                    robotLost = true;
-                } else {
-                    robotYPosition--;
+                if(movementIsSafe(robotBearing)) {
+                    if (robotYPosition == 0) {
+                        saveWarning(robotBearing);
+                    } else {
+                        robotYPosition--;
+                    }
                 }
                 break;
             case W:
-                if(robotXPosition == 0) {
-                    robotLost = true;
-                } else {
-                    robotXPosition--;
+                if(movementIsSafe(robotBearing)) {
+                    if (robotXPosition == 0) {
+                        saveWarning(robotBearing);
+                    } else {
+                        robotXPosition--;
+                    }
                 }
                 break;
         }
     }
 
+    // Leave a warning for other robots to avoid this maneuver
+    private void saveWarning(Compass robotBearing) {
+        robotLost = true;
+        if( marsWarningGrid[robotXPosition][robotYPosition] == null) {
+            marsWarningGrid[robotXPosition][robotYPosition] = new HashSet<Compass>();
+        }
+        marsWarningGrid[robotXPosition][robotYPosition].add(robotBearing);
+    }
+
+    // Check if a warning has been left by previous lost robots.
+    private Boolean movementIsSafe(Compass robotBearing) {
+        if(marsWarningGrid[robotXPosition][robotYPosition] == null) {
+            return true;
+        } else {
+            return !marsWarningGrid[robotXPosition][robotYPosition].contains(robotBearing);
+        }
+    }
 }
