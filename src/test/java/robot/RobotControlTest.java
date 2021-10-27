@@ -18,7 +18,7 @@ class RobotControlTest {
         InputStream testIn = new ByteArrayInputStream("5 3 \n 1 1 E\n RFRFRFRF".getBytes(StandardCharsets.UTF_8));
         Scanner scanner = new Scanner(testIn);
         String result = underTest.commandRobots(scanner);
-        Assertions.assertEquals("1 1 E",result);
+        Assertions.assertEquals("1 1 E ",result);
     }
 
     @Test
@@ -27,7 +27,7 @@ class RobotControlTest {
         InputStream testIn = new ByteArrayInputStream("5 3 \n 1 1 E\n R".getBytes(StandardCharsets.UTF_8));
         Scanner scanner = new Scanner(testIn);
         String result = underTest.commandRobots(scanner);
-        Assertions.assertEquals("1 1 S",result);
+        Assertions.assertEquals("1 1 S ",result);
     }
 
     @Test
@@ -36,7 +36,7 @@ class RobotControlTest {
         InputStream testIn = new ByteArrayInputStream("5 3 \n 1 1 E\n F".getBytes(StandardCharsets.UTF_8));
         Scanner scanner = new Scanner(testIn);
         String result = underTest.commandRobots(scanner);
-        Assertions.assertEquals("1 2 E",result);
+        Assertions.assertEquals("2 1 E ",result);
     }
 
     @Test
@@ -45,6 +45,15 @@ class RobotControlTest {
         InputStream testIn = new ByteArrayInputStream("5 3 \n 0 1 W\n F".getBytes(StandardCharsets.UTF_8));
         Scanner scanner = new Scanner(testIn);
         String result = underTest.commandRobots(scanner);
-        Assertions.assertEquals("0 1 W LOST",result);
+        Assertions.assertEquals("0 1 W LOST ",result);
+    }
+
+    @Test
+    void moveTwoRobots() {
+        RobotControl underTest = new RobotControl();
+        InputStream testIn = new ByteArrayInputStream("5 3 \n 1 1 E\n RFRFRFRF\n 3 2 N\n FRRFLLFFRRFLL".getBytes(StandardCharsets.UTF_8));
+        Scanner scanner = new Scanner(testIn);
+        String result = underTest.commandRobots(scanner);
+        Assertions.assertEquals("1 1 E 3 3 N LOST ",result);
     }
 }

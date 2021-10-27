@@ -65,7 +65,7 @@ public class RobotControl {
                     System.out.println("Unknown command "+command);
             }
         }
-        String resultLocation = robotXPosition+" "+robotYPosition+" "+robotBearing+(robotLost?" LOST":"");
+        String resultLocation = robotXPosition+" "+robotYPosition+" "+robotBearing+(robotLost?" LOST":"")+" ";
 
         return resultLocation;
     }
