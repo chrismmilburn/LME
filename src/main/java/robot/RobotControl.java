@@ -2,7 +2,6 @@ package robot;
 
 import utils.Compass;
 import utils.RobotCommands;
-
 import java.util.Scanner;
 
 public class RobotControl {
@@ -60,7 +59,7 @@ public class RobotControl {
                     robotBearing = Compass.turnRight(robotBearing);
                     break;
                 case F:
- //                   moveForward();
+                    moveForward();
                     break;
                 default:
                     System.out.println("Unknown command "+command);
@@ -69,6 +68,24 @@ public class RobotControl {
         String resultLocation = robotXPosition+" "+robotYPosition+" "+robotBearing+(robotLost?" LOST":"");
 
         return resultLocation;
+    }
+
+    private void moveForward() {
+
+        switch (robotBearing) {
+            case N:
+                robotXPosition++;
+                break;
+            case E:
+                robotYPosition++;
+                break;
+            case S:
+                robotYPosition--;
+                break;
+            case W:
+                robotXPosition--;
+                break;
+        }
     }
 
 }
